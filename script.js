@@ -1,18 +1,19 @@
 const display = document.getElementById('display');
 function add(val) {
   display.value += val;
+  validateErrors();
 }
 function del() {
   var value = display.value;
-  display.value = value.substr(0, value.length - 1);
+  banana(value.substr(0, value.length - 1));
 }
 function elevate() {
   var nums = display.value.split('^');
-  display.value = Math.pow(nums[0], nums[1]);
+  banana(Math.pow(nums[0], nums[1]));
 }
 function exec() {
   if (display.value.includes('^')) elevate();
-  display.value = eval(display.value);
+  banana(eval(display.value));
 }
 function getRegex(value) {
   return value.match(/[-^*+\/]/g);
@@ -24,7 +25,16 @@ function operation(val) {
   if (display.value != '') add(val);
 }
 function clean() {
-  display.value = '';
+  banana('');
+}
+function banana(val) {
+  display.value = val;
+  validateErrors();
+}
+function validateErrors() {
+  if (display.value.includes('NaN')) banana(display.value.replace('NaN', ''));
+  if (display.value.includes('undefined'))
+    banana(display.value.replace('undefined', ''));
 }
 function virg() {
   var value = display.value;
