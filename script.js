@@ -1,46 +1,56 @@
 const display = document.getElementById('display');
-function add(val) {
+
+function includeNumber(val) {
   display.value += val;
   validateErrors();
 }
+
 function del() {
   var value = display.value;
-  banana(value.substr(0, value.length - 1));
+  evaluate(value.substr(0, value.length - 1));
 }
+
 function elevate() {
   var nums = display.value.split('^');
-  banana(Math.pow(nums[0], nums[1]));
+  evaluate(Math.pow(nums[0], nums[1]));
 }
-function exec() {
+
+function executeOperation() {
   if (display.value.includes('^')) elevate();
-  banana(eval(display.value));
+  evaluate(eval(display.value));
 }
-function getRegex(value) {
+
+function getOperation(value) {
   return value.match(/[-^*+\/]/g);
 }
+
 function operation(val) {
-  if (getRegex(display.value) != undefined) {
-    exec();
+  if (getOperation(display.value) != undefined) {
+    executeOperation();
   }
-  if (display.value != '') add(val);
+  if (display.value != '') includeNumber(val);
 }
+
 function clean() {
-  banana('');
+  evaluate('');
 }
-function banana(val) {
+
+function evaluate(val) {
   display.value = val;
   validateErrors();
 }
+
 function validateErrors() {
-  if (display.value.includes('NaN')) banana(display.value.replace('NaN', ''));
+  if (display.value.includes('NaN')) evaluate(display.value.replace('NaN', ''));
   if (display.value.includes('undefined'))
-    banana(display.value.replace('undefined', ''));
+    evaluate(display.value.replace('undefined', ''));
 }
-function virg() {
-  var value = display.value;
-  var regex = getRegex(display.value);
+
+function includeComma() {
+  let value = display.value;
+  let regex = getOperation(display.value);
   if (regex != undefined) {
-    var nums = value.split(regex);
+    let nums = value.split(regex);
     if (
       nums.length != undefined &&
       !nums[1].includes('.') &&
